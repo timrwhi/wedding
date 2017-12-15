@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Kelsey + Tim</title>
+    <link href="https://fonts.googleapis.com/css?family=Julius+Sans+One|Montserrat|Nixie+One|Work+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Maitree|Slabo+27px" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Antic|Convergence|Molengo|Reem+Kufi|Sanchez" rel="stylesheet">
+    <style>
+      html, body, #root {
+        height: 100%;
+        /* font-family: 'Nixie One', cursive; */
+        font-family: 'Maitree', serif;
+        /* font-family: 'Sanchez', serif; */
+        /* font-family: 'Molengo', sans-serif; */
+        /* font-family: 'Antic', sans-serif; */
+        /* font-family: 'Convergence', sans-serif; */
+      }
+      .guest {
+        transition: top 100ms ease-in-out;
+      }
+      .guest .status {
+        transition: color 100ms ease-in-out;
+      }
+      .container {
+        height: 100%;
+        width: 100%;
+        position: relative;
+      }
+      .content {
+        font-size: 1em;
+        z-index: 1;
+        position: relative;
+        color: rgb(235, 235, 235);
+        text-align: center;
+        text-transform: uppercase;
+      }
+      .overlay {
+        background-color: rgba(28,13,10,.65);
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        z-index: 0;
+      }
+      #img {
+        z-index: -1;
+        position: absolute;
+        background-image: url("/img.jpeg");
+        background-position: 50%;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+      }
+      .names {
+        padding-top: 1em;
+      }
+      .title {
+        /* font-family: 'Julius Sans One', sans-serif; */
+
+        /* font-family: 'Molengo', sans-serif; */
+        /* font-family: 'Antic', sans-serif; */
+        /* font-family: 'Convergence', sans-serif; */
+        font-family: 'Reem Kufi', sans-serif;
+        
+        font-size: 3.2em;
+        margin: 1em 0 .75em;
+        text-transform: uppercase;
+      }
+      .button {
+        margin-top: 3.75em;
+        font-size: 0.75em;
+        padding: 12px 24px;
+        display: inline-block;
+        color: #333;
+        background-color: rgb(201, 201, 201);
+        border-radius: 30px;
+        opacity: 0.75;
+        cursor: pointer;
+      }
+      .button-secondary {
+        background-color: #333;
+        color: white;
+        margin-top: 0;
+      }
+      .button:hover {
+        opacity: 1;
+      }
+      input[type="text"] {
+        margin-top: 3.75em;
+        padding: 16px;
+        border: 0;
+        font-family: monospace;
+        outline: none;
+        font-size: 16px;
+        color: rgb(70, 69, 69);
+        text-align: center;
+        border-radius: 2px;
+        background: rgb(201, 201, 201);
+      }
+      h1, h2 {
+        /* font-family: 'Julius Sans One', sans-serif; */
+        font-family: 'Reem Kufi', sans-serif;
+      }
+      h1 {
+        font-size: 2em;
+      }
+      h2 {
+        text-transform: uppercase;
+        margin-top: 0;
+      }
+      #details {
+        font-size: 1.2em;
+      }
+      #details > section {
+        display: flex;
+        justify-content: center;
+        padding: 24px 0;
+        width: 100%;
+      }
+      #details > section:first-of-type {
+        padding-top: 0;
+      }
+      #details > section > div {
+        max-width: 600px;
+        padding: 16px;
+      }
+      #details > section:nth-of-type(2) {
+        background: #faebe3;
+      }
+      .cb-group {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        align-items: center;
+      }
+      textarea {
+        padding: 16px;
+        font-size: 16px;
+        width: 100%;
+        resize: none;
+        height: 70px;
+        border: 1px solid #afafaf;
+        border-radius: 3px;
+        box-sizing: border-box;
+      }
+      .image {
+        max-width: 100px;
+        min-height: 100px;
+      }
+      @media (min-width:400px) {
+        .content {
+          font-size: 1.1em;
+        }
+        .image {
+          max-width: 180px;
+          min-height: 125px;
+        }
+      }
+      @media (min-width:600px) {
+        .content {
+          font-size: 1.5em;
+        }
+        .image {
+          max-width: 280px;
+          min-height: 200px;
+        }
+      }
+      @media (min-width:800px) {
+        .content {
+          font-size: 1.75em
+        }
+        .button {
+          margin-top: 2.75em;
+        }
+      }
+      @media (max-height: 620px) and (orientation: landscape) {
+        .content {
+          font-size: 0.9em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
