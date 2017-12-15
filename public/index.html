@@ -43,6 +43,8 @@
         height: 100%;
         width: 100%;
         position: relative;
+        display: flex;
+        justify-content: center;        
       }
       .content {
         font-size: 1em;
@@ -85,10 +87,14 @@
         text-transform: uppercase;
       }
       .button {
-        margin-top: 3.75em;
+        margin: 3.75em auto 0;
         font-size: 0.75em;
-        padding: 12px 24px;
-        display: inline-block;
+        padding: 0 12px;
+        height: 50px;
+        width: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: #333;
         background-color: rgb(201, 201, 201);
         border-radius: 30px;
@@ -120,7 +126,7 @@
         font-family: 'Reem Kufi', sans-serif;
       }
       h1 {
-        font-size: 2em;
+        font-size: 1.5em;
       }
       h2 {
         text-transform: uppercase;
@@ -147,9 +153,10 @@
       }
       .cb-group {
         display: flex;
-        flex-direction: column;
         padding: 16px;
         align-items: center;
+        justify-content: space-between;
+        width: 250px;
       }
       textarea {
         padding: 16px;
@@ -182,10 +189,28 @@
           max-width: 280px;
           min-height: 200px;
         }
+        .cb-group {
+          /* width: auto; */
+          flex-direction: column;
+        }
       }
       @media (min-width:800px) {
+        h1 {
+          font-size: 2em;
+        }
         .content {
           font-size: 1.75em
+        }
+        .button {
+          margin-top: 2.75em;
+        }
+      }
+      @media (min-width:1000px) {
+        .content {
+          font-size: 1.75em;
+        }
+        .container {
+          align-items: center;
         }
         .button {
           margin-top: 2.75em;
@@ -203,15 +228,5 @@
       You need to enable JavaScript to run this app.
     </noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

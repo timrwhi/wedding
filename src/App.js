@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import firebase from 'firebase';
+
+const config = {
+  apiKey: "AIzaSyDp-HnXVEhsQuN0I_TqTbtrxAdUKS4r8vk",
+  databaseURL: "https://tamnrels.firebaseio.com",
+};
+
+const f = firebase.initializeApp(config);
+const database = f.database();
 
 const images = [
   {
@@ -31,7 +41,15 @@ const images = [
   }
 ]
 
-const guests = ['Kate', 'Ian']
+async function fetchInvitation(code, cb) {
+  return new Promise(resolve => {
+    database.ref(code).once('value', x => resolve(x.val()));
+  });
+}
+
+function saveResponse(code, isComing) {
+  database.ref(code).update({ isComing });
+}
 
 class App extends Component {
   state = {
@@ -39,23 +57,40 @@ class App extends Component {
     guests: []
   };
 
-  componentDidMount() {
-    const code = window.localStorage.getItem('rsvpCode')
-    if (code) {
-      this.setState({ guests })
+  async componentDidMount() {
+    const rsvpCode = window.localStorage.getItem('rsvpCode')
+    if (!rsvpCode) {
+      return;
+    }
+    const invitation = await fetchInvitation(rsvpCode);
+    if (invitation) {
+      this.setState({ ...invitation, rsvpCode }, this.scrollToDetails)
     }
   }
 
-  handleKeyUp = e => {
+  handleKeyUp = async e => {
     if (e.key === 'Enter') {
-      this.input.blur();
-      this.setState({
-        showDetails: true,
-        guests
-      }, () => {
-        document.getElementById('details').scrollIntoView({ behavior: 'smooth', block: 'start' })
-      })
+      const invitation = await fetchInvitation(this.state.rsvpCode);
+      if (invitation) {
+        this.input.blur();
+        window.localStorage.setItem('rsvpCode', this.state.rsvpCode);
+        this.setState({ ...invitation }, this.scrollToDetails)
+      }
     }
+  }
+
+  handleChangeInput = e => {
+    this.setState({ rsvpCode: e.target.value });
+  }
+
+  scrollToDetails = () => {
+    const node = ReactDOM.findDOMNode(this.details);
+    if (!node) {
+      return;
+    }
+    setTimeout(() => {
+      node.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 200);
   }
 
   renderHero() {
@@ -67,14 +102,16 @@ class App extends Component {
           <div className="names">Kelsey + Tim</div>
           <div className="title">We're Getting Married</div>
           <div className="date">July 7, 2018 / Chicago</div>
-          {!this.state.showInput &&
+          {!this.state.showInput && !this.state.rsvpCode &&
             <div className="button" onClick={() => this.setState({ showInput: true })}>RSVP</div>
           }
-          {this.state.showInput &&
+          {(this.state.showInput || this.state.rsvpCode) &&
             <input
-              autoFocus
+              autoFocus={!this.state.rsvpCode}
+              value={this.state.rsvpCode || ''}
               type="text"
               onKeyUp={this.handleKeyUp}
+              onChange={this.handleChangeInput}
               placeholder="enter your code"
               ref={input => this.input = input}
             />
@@ -84,80 +121,45 @@ class App extends Component {
     );
   }
 
-  updateGuest(guest, isComing) {
-    console.log(guest.name, isComing)
-    const i = this.state.guests.findIndex(g => g.name === guest.name);
-    const updatedGuests = this.state.guests
-    this.setState({
-      isComing: !this.state.isComing
-    })
+  openImage(src) {
+    this.setState({ viewingImage: src })
   }
 
-  openImage(src) {
-    this.setState({
-      viewingImage: src
-    })
+  handleRSVP = isComing => {
+    saveResponse(this.state.rsvpCode, isComing);
+    this.setState({ isComing, hasResponded: true });
   }
 
   renderDetails() {
     return (
-      <div id="details" style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-      }}>
+      <div
+        id="details"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+        }}
+        ref={details => {this.details = details}}
+      >
         {this.state.viewingImage &&
-          <div style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            height: '100%',
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0, 0, 0, 0.82)'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 16,
-              right: 16,
-              fontSize: '2em',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.5)',
-              borderRadius: 3,
-              height: 50,
-              width: 50,
-              cursor: 'pointer'
-            }}
-            onClick={() => this.setState({viewingImage: ''})}>&times;</div>
-            <img src={this.state.viewingImage} style={{width: '100%'}}/>
-          </div>
+          <BigImage
+            handleClose={() => this.setState({viewingImage: ''})}
+            src={this.state.viewingImage}
+          />
         }
         <section>
           <div>
-            <h1 style={{marginTop: 16}}>Show a personalized note right here.</h1>
-            {/* <p>We hope to see you at our wedding!</p> */}
-            <div>
-              <div style={{marginBottom: 16}}>{this.state.guests[0]} and {this.state.guests[1]}, will you be joining us?</div>
-              <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
-                <div className="cb-group">
-                  <Checkbox checked={this.state.isComing} handleClick={() => this.setState({ isComing: true })}/>
-                  <div>Accept with pleasure</div>
-                </div>
-                <div className="cb-group">
-                  <Checkbox checked={!this.state.isComing} handleClick={() => this.setState({ isComing: false })}/>
-                  <div>Decline with regret</div>
-                </div>
-              </div>
-            </div>
-            {/* <div style={{width: '100%' }}>
-              <textarea placeholder="Send us a note if you want"/>
-            </div>
-            <div className="button button-secondary">Send</div> */}
+            <h1 style={{marginTop: 16}}>
+              Hey {this.state.guests[0]} and {this.state.guests[1]}! {this.state.message} Will you be joining us?
+            </h1>
+            <RSVP
+              handleChange={this.handleRSVP}
+              handleClearResponse={() => this.setState({ isComing: undefined })}
+              isComing={this.state.isComing}
+              hasResponded={typeof this.state.isComing === 'boolean'}
+            />
           </div>
         </section>
         <section>
@@ -189,14 +191,17 @@ class App extends Component {
             alignItems: 'center'
           }}>
             <h2>Photos</h2>
-            <div style={{width: '100%', maxWidth: 1000,
-            display: 'flex',
-            flexFlow: 'row wrap',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+            <div style={{
+              width: '100%',
+              maxWidth: 1000,
+              display: 'flex',
+              flexFlow: 'row wrap',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
               {images.map((img, i) => (
                 <div
+                  key={i}
                   className="image"
                   style={{
                     backgroundImage: `url(${img.small})`,
@@ -226,7 +231,7 @@ class App extends Component {
     return (
       <div style={{ height: '100%' }}>
         {this.renderHero()}
-        {this.state.showDetails &&
+        {this.state.rsvpCode &&
           this.renderDetails()
         }
       </div>
@@ -253,31 +258,142 @@ const style = {
   }
 }
 
-class Checkbox extends React.Component {
-  state = {
-    checked: this.props.checked,
-    hovered: false
-  };
+const BigImage = props => (
+  <div style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.82)'
+  }}>
+    <div style={{
+      position: 'absolute',
+      top: 16,
+      right: 16,
+      fontSize: '2em',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      borderRadius: 3,
+      height: 50,
+      width: 50,
+      cursor: 'pointer'
+    }}
+    onClick={props.handleClose}>&times;</div>
+    <img alt='' src={props.src} style={{width: '100%'}}/>
+  </div>
+);
 
-  toggleChecked = () => {
-    this.setState({
-      hovered: !this.state.hovered
-    })
-  }
-
-  render() {
-    return (
-      <div style={style.checkbox} onClick={this.props.handleClick}>
-        <div style={{
-          opacity: this.props.checked || this.state.hovered ? '1' : '0',
-          transition: 'opacity 100ms ease-in-out'
-        }}>
-          <div style={style.x}/>
-          <div style={{...style.x, transform: 'rotate(-45deg)'}}/>
-        </div>
+const Checkbox = props => (
+  <div className="cb-group" >
+    <div style={style.checkbox}>
+      <div style={{
+        opacity: props.checked ? '1' : '0',
+        transition: 'opacity 100ms ease-in-out'
+      }}>
+        <div style={style.x}/>
+        <div style={{...style.x, transform: 'rotate(-45deg)'}}/>
       </div>
-    )
-  }
-}
+    </div>
+    <div>{props.label}</div>
+  </div>
+);
+
+const Floater = props => (
+  <div className="bad" style={{
+    opacity: props.active ? 0 : 1,
+    visibility: props.active ? 'visible' : 'hidden',
+    transform: `translateY(${props.active ? -50 : 0}px)`,
+    top: !props.active && -9999,
+    position: 'absolute',
+    transition: '1000ms ease-out',
+    fontSize: '2em',
+    zIndex: -1
+  }}>{props.children}</div>
+);
+
+const RSVPBothVisible = props => (
+  <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+    <div onClick={() => props.handleChange(true)}>
+      <Floater active={props.isComing === true}>
+        <span role="img" aria-label="party">🎉</span> See you there!
+      </Floater>
+      <Checkbox checked={props.isComing === true} label="Accept with pleasure" />
+    </div>
+    <div onClick={() => props.handleChange(false)}>
+      <Floater active={props.isComing === false}>
+        <span role="img" aria-label="sad face">😢</span> We'll miss you!
+      </Floater>
+      <Checkbox checked={props.isComing === false} label="Decline with regret" />
+    </div>
+  </div>
+);
+
+const DelayedFloater = props => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: props.active ? 1 : 0,
+    transform: `translateY(${props.active ? -5 : 0}px)`,
+    transition: props.delay && `500ms ease-in ${props.delay || 0}ms`,
+    position: 'absolute',
+    zIndex: props.active ? 1 : 0,
+    fontSize: '1.5em',
+    height: '100%',
+    width: '100%',
+  }}>{props.children}</div>
+)
+
+const RSVP = props => (
+  <div style={{position: 'relative', minHeight: 130}}>
+    <DelayedFloater active={props.hasResponded && props.isComing} delay={props.hasResponded && 500}>
+      <div style={{display: 'flex', flexDirection: 'column'}}>    
+        <div><span role="img" aria-label="party">🎉</span> See you there!</div>
+        <div style={{
+          fontSize: '0.75em',
+          background: '#c1c1c1',
+          borderRadius: 25,
+          marginTop: '0.75em',
+          color: 'white',
+          cursor: 'pointer'          
+        }} onClick={props.handleClearResponse}>change rsvp</div>
+      </div>
+    </DelayedFloater>
+    <DelayedFloater active={props.hasResponded && !props.isComing} delay={props.hasResponded && 500}>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div><span role="img" aria-label="sad face">😢</span> We'll miss you!</div>
+        <div style={{
+          fontSize: '0.75em',
+          background: '#c1c1c1',
+          borderRadius: 25,
+          marginTop: '0.75em',
+          color: 'white',
+          cursor: 'pointer'
+        }} onClick={props.handleClearResponse}>change rsvp</div>
+      </div>
+    </DelayedFloater>
+    <div style={{ display: 'flex',  flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', position: 'relative', }}>
+      <div onClick={() => props.handleChange(true)} style={{
+        opacity: !props.hasResponded ? 1 : 0,
+        transition: `opacity 300ms ease-out 200ms, ${props.hasResponded && 'height 500ms ease-out 500ms'}`,
+        height: props.hasResponded ? 0 : 100
+      }}>
+        <Checkbox checked={props.isComing === true} label="Accept with pleasure" />
+      </div>
+      <div onClick={() => props.handleChange(false)} style={{
+        opacity: !props.hasResponded ? 1 : 0,
+        transition: `opacity 300ms ease-out 200ms, ${props.hasResponded && 'height 500ms ease-out 500ms'}`,
+        height: props.hasResponded ? 0 : 100
+      }}>
+        <Checkbox checked={props.isComing === false} label="Decline with regret" />
+      </div>
+    </div>
+  </div>
+);
 
 export default App;
