@@ -12,33 +12,53 @@ const database = f.database();
 
 const images = [
   {
-    small: '/kelsey-tim-1_preview.jpeg',
-    full: '/kelsey-tim-6_preview.jpeg'
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-1_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-1-min.jpg'
   },
   {
-    small: '/kelsey-tim-6_preview.jpeg',
-    full: '/kelsey-tim-6_preview.jpeg'
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-6_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-6-min.jpg'
   },
   {
-    small: '/kelsey-tim-14_preview.jpeg',
-    full: '/kelsey-tim-14_preview.jpeg',
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-14_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-14-min.jpg',
   },
   {
-  small: '/kelsey-tim-55_preview.jpeg',
-  full: '/kelsey-tim-55_preview.jpeg',  
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-33_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-33-min.jpg',
   },
   {
-    small: '/kelsey-tim-66_preview.jpeg',
-    full: '/kelsey-tim-66_preview.jpeg',
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-55_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-55-min.jpg',  
   },
   {
-    small: '/img.jpeg',
-    full: '/img.jpeg',
-  }, 
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-66_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-66-min.jpg',
+  },
   {
-    small: '/img2.jpeg',
-    full: '/img2.jpeg',
-  }
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-72_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-72-min.jpg',
+  },
+  {
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-90_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-90-min.jpg',
+  },
+  {
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-91_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-91-min.jpg',
+  },
+  {
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-98_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-98-min.jpg',
+  },
+  {
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-129_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-129-min.jpg',
+  },
+  {
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-138_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-138-min.jpg',
+  },
 ]
 
 async function fetchInvitation(code, cb) {
@@ -80,7 +100,7 @@ class App extends Component {
   }
 
   handleChangeInput = e => {
-    this.setState({ rsvpCode: e.target.value });
+    this.setState({ rsvpCode: e.target.value.toLowerCase() });
   }
 
   scrollToDetails = () => {
