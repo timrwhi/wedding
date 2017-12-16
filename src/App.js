@@ -278,35 +278,56 @@ const style = {
   }
 }
 
-const BigImage = props => (
-  <div style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.82)'
-  }}>
-    <div style={{
-      position: 'absolute',
-      top: 16,
-      right: 16,
-      fontSize: '2em',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'rgba(255, 255, 255, 0.5)',
-      borderRadius: 3,
-      height: 50,
-      width: 50,
-      cursor: 'pointer'
-    }}
-    onClick={props.handleClose}>&times;</div>
-    <img alt='' src={props.src} style={{width: '100%'}}/>
-  </div>
-);
+class BigImage extends React.Component {
+  state = {
+    loading: true
+  };
+
+  handleClose = () => {
+    this.setState({ loading: true });
+    this.props.handleClose()
+  }
+
+  render() {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.82)'
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 16,
+          right: 16,
+          fontSize: '2em',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+          borderRadius: 3,
+          height: 50,
+          width: 50,
+          cursor: 'pointer'
+        }}
+        onClick={this.handleClose}>&times;</div>
+        {this.state.loading &&
+          <div className="loader">Loading...</div>
+        }
+        <img
+          alt=''
+          src={this.props.src}
+          style={{ width: '100%' }}
+          onLoad={() => this.setState({ loading: false })}
+        />
+      </div>
+    );
+  }
+}
 
 const Checkbox = props => (
   <div className="cb-group" >
