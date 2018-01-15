@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import firebase from 'firebase';
+import Hammer from 'react-hammerjs';
 
 const config = {
   apiKey: "AIzaSyDp-HnXVEhsQuN0I_TqTbtrxAdUKS4r8vk",
@@ -16,24 +17,28 @@ const images = [
     full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-1-min.jpg'
   },
   {
-    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-6_preview.jpeg',
-    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-6-min.jpg'
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-138_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-138-min.jpg',
   },
   {
-    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-14_preview.jpeg',
-    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-14-min.jpg',
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-61_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-61-min.jpg',
   },
   {
     small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-33_preview.jpeg',
     full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-33-min.jpg',
   },
   {
-    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-55_preview.jpeg',
-    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-55-min.jpg',  
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-91_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-91-min.jpg',
   },
   {
-    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-66_preview.jpeg',
-    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-66-min.jpg',
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-67_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-67-min.jpg',  
+  },
+  {
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-153_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-153-min.jpg',
   },
   {
     small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-72_preview.jpeg',
@@ -43,10 +48,7 @@ const images = [
     small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-90_preview.jpeg',
     full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-90-min.jpg',
   },
-  {
-    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-91_preview.jpeg',
-    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-91-min.jpg',
-  },
+  
   {
     small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-98_preview.jpeg',
     full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-98-min.jpg',
@@ -56,8 +58,8 @@ const images = [
     full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-129-min.jpg',
   },
   {
-    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-138_preview.jpeg',
-    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-138-min.jpg',
+    small: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-6_preview.jpeg',
+    full: 'https://s3.amazonaws.com/kelseyandtim.com/kelsey-tim-6-min.jpg'
   },
 ]
 
@@ -73,6 +75,7 @@ function saveResponse(code, isComing) {
 
 class App extends Component {
   state = {
+    bigImageIndex: 0,
     showDetails: false,
     guests: []
   };
@@ -120,7 +123,7 @@ class App extends Component {
         <div id="img" />
         <div className="content">
           <div className="names">Kelsey + Tim</div>
-          <div className="title">We're Getting Married</div>
+          <div className="title">We&apos;re Getting Married</div>
           <div className="date">July 7, 2018 / Chicago</div>
           {!this.state.showInput && !this.state.rsvpCode &&
             <div className="button" onClick={() => this.setState({ showInput: true })}>RSVP</div>
@@ -141,13 +144,36 @@ class App extends Component {
     );
   }
 
-  openImage(src) {
-    this.setState({ viewingImage: src })
+  openImage(i) {
+    this.setState({
+      bigImageIndex: i,
+      viewingImage: images[i].full,
+      placeholder: images[i].small,
+    });
   }
 
   handleRSVP = isComing => {
     saveResponse(this.state.rsvpCode, isComing);
     this.setState({ isComing, hasResponded: true });
+  }
+
+  updateBigImageIndex(increment) {
+    let newIndex = this.state.bigImageIndex + increment;
+    console.log(newIndex)
+    if (newIndex === images.length) {
+      this.setState({ bigImageIndex: 0 })
+      this.openImage(0)
+      return;
+    }
+
+    if (newIndex < 0) {
+      this.setState({ bigImageIndex: images.length - 1 });
+      this.openImage(images.length - 1)
+      return;
+    }
+
+    this.setState({ bigImageIndex: newIndex })
+    this.openImage(newIndex)
   }
 
   renderDetails() {
@@ -165,14 +191,20 @@ class App extends Component {
       >
         {this.state.viewingImage &&
           <BigImage
+            handleShowPrev={() => this.updateBigImageIndex(-1)}
+            handleShowNext={() => this.updateBigImageIndex(1)}
             handleClose={() => this.setState({viewingImage: ''})}
+            placeholder={this.state.placeholder}
             src={this.state.viewingImage}
           />
         }
         <section>
           <div>
             <h1 style={{marginTop: 16}}>
-              Hey {this.state.guests[0]} and {this.state.guests[1]}! {this.state.message} Will you be joining us?
+              {!this.state.message ?
+                `Hey ${this.state.guests[0]} and ${this.state.guests[1]}! Will you be joining us?` :
+                `${this.state.message}`
+              }
             </h1>
             <RSVP
               handleChange={this.handleRSVP}
@@ -185,14 +217,14 @@ class App extends Component {
         <section>
           <div>
             <h2>Wedding Details</h2>
-            <p>We're going to have a casual ceremony on the rooftop of Little Goat in the west loop, where we had our first Valentine's day together. There's gonna be a bunch of food, vegetarian, etc. and drinks and dancing and it's gonna be great.</p>
-            <p>6:00p - 11:00p, Little Goat, Chicago IL</p>
+            <p>We're going to have a casual ceremony on the Little Goat Kitchen rooftop in the West Loop, where we had our first Valentine's day together. Following the ceremony we'll have music, drinks, and food catered by The Girl &amp; the Goat and Little Goat Diner.</p>
+            <p>6:00p - 11:00p, Little Goat Kitchen, Chicago IL</p>
           </div>
         </section>
         <section>
           <div>
             <h2>Our Story</h2>
-            <p>Tim White and Kelsey Hoehn met at a New Years party in Chicago. We picked up the balloon drop like ballers and now we're in love. We have a pig and a gato.</p>
+            <p>Tim White and Kelsey Hoehn met at a New Year's Eve celebration in Chicago. We bonded over a balloon drop malfunction that resulted in the two of us collecting lots of fallen balloons, and we haven't looked back since.</p>
           </div>
         </section>
         <section>
@@ -210,7 +242,10 @@ class App extends Component {
             flexDirection: 'column',
             alignItems: 'center'
           }}>
-            <h2>Photos</h2>
+            <h2 style={{ marginBottom: 0 }}>Photos</h2>
+            <div style={{ marginBottom: '2em', fontSize: '.75em' }}>
+              <span style={{marginRight: 4}}>by</span><a href="https://www.instagram.com/alishatova/">@alishiatova</a>
+            </div>
             <div style={{
               width: '100%',
               maxWidth: 1000,
@@ -231,7 +266,7 @@ class App extends Component {
                     margin: 1,
                     cursor: 'pointer'
                   }}
-                  onClick={() => this.openImage(img.full)}
+                  onClick={() => this.openImage(i)}
                 />
               ))}
             </div>
@@ -240,7 +275,9 @@ class App extends Component {
         <section>
           <div>
             <h2>Registry</h2>
-
+            <a href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172">
+              <img alt='crate &amp; barrel' src="https://static1.squarespace.com/static/57884b13e6f2e11d7ccf73d8/58cb48de3e00be7918cd2b44/58cb4ab5be65946ee838572f/1489718396797/cb-logo.png" style={{ width: 150 }} />
+            </a>
           </div>
         </section>
       </div>
@@ -274,7 +311,16 @@ const style = {
     transform: 'rotate(45deg)',
     width: '100%',
     position: 'absolute',
-    top: 18
+    top: 18,
+  },
+  changer: {
+    fontFamily: 'monospace',
+    fontWeight: 100,
+    fontSize: '6em',
+    position: 'absolute',
+    cursor: 'pointer',
+    color: 'white',
+    opacity: 0.5,
   }
 }
 
@@ -283,23 +329,75 @@ class BigImage extends React.Component {
     loading: true
   };
 
+  componentWillMount() {
+    document.addEventListener('keyup', this.handleChangeImage)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleChangeImage);
+  }
+
+  handleShowNext = () => {
+    this.setState({ loading: true });
+    this.props.handleShowNext();
+  }
+
+  handleShowPrev = () => {
+    this.setState({ loading: true });
+    this.props.handleShowPrev();
+  }
+
+  handleChangeImage = e => {
+    if (e.key === 'Escape') {
+      this.handleClose();
+    }
+
+    if (e.key === 'ArrowLeft') {
+      this.handleShowPrev();
+    }
+
+    if (e.key === 'ArrowRight') {
+      this.handleShowNext();
+    }
+  }
+
   handleClose = () => {
     this.setState({ loading: true });
-    this.props.handleClose()
+    this.props.handleClose();
+  }
+
+  handleSwipe = e => {
+    if (e.direction === 4) {
+      this.handleShowPrev();
+    }
+
+    if (e.direction === 2) {
+      this.handleShowNext();
+    }
+  }
+
+  handleClickOutside = e => {
+    if (e.target === this.overlay) {
+      this.handleClose();
+    }
   }
 
   render() {
     return (
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.82)'
-      }}>
+      <div
+        ref={overlay => { this.overlay = overlay }}
+        onClick={this.handleClickOutside}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: 'rgba(0, 0, 0, 0.82)'
+        }}
+      >
         <div style={{
           position: 'absolute',
           top: 16,
@@ -312,18 +410,44 @@ class BigImage extends React.Component {
           borderRadius: 3,
           height: 50,
           width: 50,
-          cursor: 'pointer'
+          cursor: 'pointer',
+          zIndex: 900,
         }}
         onClick={this.handleClose}>&times;</div>
+        <div
+          style={{
+            ...style.changer,
+            left: 10
+          }}
+          onClick={this.handleShowPrev}
+        >
+          &lsaquo;
+        </div>
         {this.state.loading &&
-          <div className="loader">Loading...</div>
+          <Hammer onSwipe={this.handleSwipe}>
+            <img
+              className="big-image"
+              alt=''
+              src={this.props.placeholder}
+            />
+          </Hammer>
         }
-        <img
-          alt=''
-          src={this.props.src}
-          style={{ width: '100%' }}
-          onLoad={() => this.setState({ loading: false })}
-        />
+        <Hammer onSwipe={this.handleSwipe} >
+          <img
+            className="big-image"
+            alt=''
+            src={this.props.src}
+            style={{ display: this.state.loading ? 'none' : 'initial' }}
+            onLoad={() => this.setState({ loading: false })}
+          />
+        </Hammer>
+        <div
+          style={{
+            ...style.changer,
+            right: 10,
+          }}
+          onClick={this.handleShowNext}
+        >&rsaquo;</div>
       </div>
     );
   }
@@ -341,36 +465,6 @@ const Checkbox = props => (
       </div>
     </div>
     <div>{props.label}</div>
-  </div>
-);
-
-const Floater = props => (
-  <div className="bad" style={{
-    opacity: props.active ? 0 : 1,
-    visibility: props.active ? 'visible' : 'hidden',
-    transform: `translateY(${props.active ? -50 : 0}px)`,
-    top: !props.active && -9999,
-    position: 'absolute',
-    transition: '1000ms ease-out',
-    fontSize: '2em',
-    zIndex: -1
-  }}>{props.children}</div>
-);
-
-const RSVPBothVisible = props => (
-  <div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
-    <div onClick={() => props.handleChange(true)}>
-      <Floater active={props.isComing === true}>
-        <span role="img" aria-label="party">🎉</span> See you there!
-      </Floater>
-      <Checkbox checked={props.isComing === true} label="Accept with pleasure" />
-    </div>
-    <div onClick={() => props.handleChange(false)}>
-      <Floater active={props.isComing === false}>
-        <span role="img" aria-label="sad face">😢</span> We'll miss you!
-      </Floater>
-      <Checkbox checked={props.isComing === false} label="Decline with regret" />
-    </div>
   </div>
 );
 

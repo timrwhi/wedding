@@ -1,0 +1,142 @@
+{
+  "maaam": {
+    "guests": ["Mom", "Bob"],
+    "message": "Hi Maaam and Bob! Thanks for everything you've helped us with. We love you! Will you join us?"
+  },
+  "faja": {
+    "guests": ["Dad", "Julie"],
+    "message": "Hi Dad and Julie! How about some delicious goat meat? We love you! Will you join us?"
+  },
+  "papnfox": {
+    "guests": ["Pap", "Fox"],
+    "message": ""
+  },
+  "fisk": {
+    "guests": ["Mary", "Trevor"],
+    "message": "Hallo Marv and Trav! Pleath come to our wedding! Love, Tammy and Rels."
+  },
+  "lily": {
+    "guests": ["Kate", "Ian"],
+    "message": "Hey Kate and Ian! Lily can come too, if she promises not to run up the bar tab. Will you join us?"
+  },
+  "code 12": {
+    "guests": ["Nichole", "Justin"],
+    "message": ""
+  },
+  "amma": {
+    "guests": ["Amma"],
+    "message": "Hi Amma! How about a big city wedding adventure?! Will you join us?"
+  },
+  "go blue": {
+    "guests": ["Grandma", "Grandpa"],
+    "message": "Hi Grandma and Grandpa! We'd love to share our wedding day with you! Will you join us?"
+  },
+  "code 1": {
+    "guests": ["Julie", "Paul"],
+    "message": ""
+  },
+  "tina": {
+    "guests": ["Kap", "Marissa"],
+    "message": "Hey guys! Can you help us finish our huppah real quick?"
+  },
+  "euchre": {
+    "guests": ["Bristol", "Carly"],
+    "message": "Hey guys! Maizey can come too, as long as she promises not to run up the bar tab. Will you join us?"
+  },
+  "code 2": {
+    "guests": ["Julia", "Dan"],
+    "message": ""
+  },
+  "code 3": {
+    "guests": ["Abby", "Joseph"],
+    "message": ""
+  },
+  "code 4": {
+    "guests": ["Lizzie", "Elmer"],
+    "message": ""
+  },
+  "dragons": {
+    "guests": ["Marc"],
+    "message": "Marc. Come to our wedding, otherwise fuck you."
+  },
+  "lyla": {
+    "guests": ["Glotter", "Neili"],
+    "message": "Hey Glotters! Will you to lead us in the horrah? Just kidding, that's cultural appropriation. Unless you say it's ok..."
+  },
+  "kevin smith": {
+    "guests": ["Max", "Corey"],
+    "message": "Hey Max and Corey! Will you join us for a night of naming random athletes? Maybe Schoolyard after?"
+  },
+  "baller": {
+    "guests": ["Bryan", "Jess"],
+    "message": "Hey ballers! Risk?"
+  },
+  "eagle spot": {
+    "guests": ["Dave", "Katie"],
+    "message": "Hey Dave and Katie! Feelin' a trip back to the midwest?"
+  },
+  "code 5": {
+    "guests": ["Elise", "Josh"],
+    "message": ""
+  },
+  "chchch": {
+    "guests": ["Jake", "Laura"],
+    "message": "Hey Jake and Laura! C'mon and hang out a little, we have a little party planned..."
+  },
+  "bill murray": {
+    "guests": ["Josh", "Lauren"],
+    "message": "Hey Josh and Lauren! Feelin' trip back to the midwest?"
+  },
+  "code 6": {
+    "guests": ["Elexa", "Kevin"],
+    "message": ""
+  },
+  "braaap": {
+    "guests": ["Uncle Tom"],
+    "message": "Hey Uncle Tom! Louise keeps asking us if you'll come to our wedding, will you join us?"
+  },
+  "bruce": {
+    "guests": ["Uncle Nitrous", "Jordan"],
+    "message": "Hey Uncle Nitrous and Jordan! The farm will survive without you for a weekend, we'd love to see you at our wedding!"
+  },
+  "goblue": {
+    "guests": ["Uncle Rob", "Aunt Kathy"],
+    "message": "Hi Uncle Rob and Aunt Kathy! We'd love to see you at our wedding, will you join us?"
+  },
+  "mackinac island": {
+    "guests": ["Uncle Joe", "Shawna"],
+    "message": "Hi Uncle Joe and Shawna! We'd love to see you at our wedding, will you join us?"
+  },
+  "code 7": {
+    "guests": ["Carol", "Ron"],
+    "message": ""
+  },
+  "code 8": {
+    "guests": ["Kimmy", "Bruce"],
+    "message": ""
+  },
+  "code 9": {
+    "guests": ["Kathy", "Jerry"],
+    "message": ""
+  },
+  "code 10": {
+    "guests": ["Ronnie", "Thaedra"],
+    "message": ""
+  },
+  "code 11": {
+    "guests": ["Gabi", "Ryan"],
+    "message": ""
+  },
+  "pineneedle lane": {
+    "guests": ["Cheryl", "Bruce"],
+    "message": "Hey Bruce and Cheryl! We'd love to see you at our wedding, will you join us?"
+  },
+  "cul de sac kids": {
+    "guests": ["Amy", "Sam"],
+    "message": "Sam and Amaaaay! We'd love to see you at our wedding, will you join us?"
+  },
+  "patience and waiting": {
+    "guests": ["Joey", "Molly"],
+    "message": "Yelloooo Joey and Molly! Hanson Island was open, but we decided to get married in Chicago... will you join us?"
+  }
+}

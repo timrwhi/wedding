@@ -122,7 +122,9 @@
         max-width: 600px;
         padding: 16px;
       }
-      #details > section:nth-of-type(2) {
+      #details > section:nth-of-type(2),
+      #details > section:last-of-type
+       {
         background: #faebe3;
       }
       .cb-group {
@@ -188,6 +190,19 @@
         }
         .button {
           margin-top: 2.75em;
+        }
+      }
+      .big-image {
+        width: 100%;
+      }
+      .big-image-container {
+        width: 100%;
+      }
+      @media (orientation: landscape) {
+        .big-image {
+          width: 80%;
+          position: relative;
+          left: 10%;
         }
       }
       @media (max-height: 620px) and (orientation: landscape) {
