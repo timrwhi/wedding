@@ -210,6 +210,8 @@ class App extends Component {
               handleChange={this.handleRSVP}
               handleClearResponse={() => this.setState({ isComing: undefined })}
               isComing={this.state.isComing}
+              yesText={this.state.buttons && this.state.buttons[0]}
+              noText={this.state.buttons && this.state.buttons[1]}
               hasResponded={typeof this.state.isComing === 'boolean'}
             />
           </div>
@@ -275,7 +277,7 @@ class App extends Component {
         <section>
           <div>
             <h2>Registry</h2>
-            <a href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172">
+            <a href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172" target="_blank">
               <img alt='crate &amp; barrel' src="https://static1.squarespace.com/static/57884b13e6f2e11d7ccf73d8/58cb48de3e00be7918cd2b44/58cb4ab5be65946ee838572f/1489718396797/cb-logo.png" style={{ width: 150 }} />
             </a>
           </div>
@@ -487,15 +489,15 @@ const DelayedFloater = props => (
 const RSVP = props => (
   <div style={{position: 'relative', minHeight: 130}}>
     <DelayedFloater active={props.hasResponded && props.isComing} delay={props.hasResponded && 500}>
-      <div style={{display: 'flex', flexDirection: 'column'}}>    
-        <div><span role="img" aria-label="party">🎉</span> See you there!</div>
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div><span role="img" aria-label="party">🎉</span> "See you there!</div>
         <div style={{
           fontSize: '0.75em',
           background: '#c1c1c1',
           borderRadius: 25,
           marginTop: '0.75em',
           color: 'white',
-          cursor: 'pointer'          
+          cursor: 'pointer'
         }} onClick={props.handleClearResponse}>change rsvp</div>
       </div>
     </DelayedFloater>
@@ -518,14 +520,14 @@ const RSVP = props => (
         transition: `opacity 300ms ease-out 200ms, ${props.hasResponded && 'height 500ms ease-out 500ms'}`,
         height: props.hasResponded ? 0 : 100
       }}>
-        <Checkbox checked={props.isComing === true} label="Accept with pleasure" />
+        <Checkbox checked={props.isComing === true} label={props.yesText || "Accept with pleasure"} />
       </div>
       <div onClick={() => props.handleChange(false)} style={{
         opacity: !props.hasResponded ? 1 : 0,
         transition: `opacity 300ms ease-out 200ms, ${props.hasResponded && 'height 500ms ease-out 500ms'}`,
         height: props.hasResponded ? 0 : 100
       }}>
-        <Checkbox checked={props.isComing === false} label="Decline with regret" />
+        <Checkbox checked={props.isComing === false} label={props.noText || "Decline with regret"} />
       </div>
     </div>
   </div>
