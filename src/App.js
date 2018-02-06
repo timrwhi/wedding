@@ -232,8 +232,9 @@ class App extends Component {
         <section>
           <div>
             <h2>Accomodations</h2>
-            <p>We reserved blocks of rooms at Some Hotel in Some Neighborhood. Rates are $100 per night with the discount.</p>
-            <p>Also check out AirBnB because you'll probably find something cheaper and cozier.</p>
+            <p>We reserved a block of rooms at the Crowne Plaza Hotel in Chicago's West Loop.</p>
+            <p><a target="_blank" rel="noopener noreferrer" href="https://www.crowneplaza.com/redirect?path=asearch&brandCode=CP&localeCode=en&regionCode=1&hotelCode=CHISH&checkInDate=06&checkInMonthYear=062018&checkOutDate=08&checkOutMonthYear=062018&rateCode=6CBARC&_PMID=99801505&GPC=h2w&viewfullsite=true">Book a room online</a> or call 312.829.5000 and mention group code H2W.</p>
+            <p>Also check out AirBnB and VRBO because you'll probably find something cheaper and cozier.</p>
           </div>
         </section>
         <section>
@@ -277,7 +278,7 @@ class App extends Component {
         <section>
           <div>
             <h2>Registry</h2>
-            <a href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172" target="_blank">
+            <a href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172" target="_blank" rel="noopener noreferrer">
               <img alt='crate &amp; barrel' src="https://static1.squarespace.com/static/57884b13e6f2e11d7ccf73d8/58cb48de3e00be7918cd2b44/58cb4ab5be65946ee838572f/1489718396797/cb-logo.png" style={{ width: 150 }} />
             </a>
           </div>
@@ -299,22 +300,6 @@ class App extends Component {
 }
 
 const style = {
-  checkbox: {
-    fontSize: 36,
-    border: '1px solid gray',
-    height: 36,
-    width: 36,
-    position: 'relative',
-    cursor: 'pointer',
-    marginRight: 8
-  },
-  x: {
-    borderTop: '1px solid',
-    transform: 'rotate(45deg)',
-    width: '100%',
-    position: 'absolute',
-    top: 18,
-  },
   changer: {
     fontFamily: 'monospace',
     fontWeight: 100,
@@ -455,20 +440,52 @@ class BigImage extends React.Component {
   }
 }
 
-const Checkbox = props => (
-  <div className="cb-group" >
-    <div style={style.checkbox}>
-      <div style={{
-        opacity: props.checked ? '1' : '0',
-        transition: 'opacity 100ms ease-in-out'
-      }}>
-        <div style={style.x}/>
-        <div style={{...style.x, transform: 'rotate(-45deg)'}}/>
+const cbs = {
+  checkbox: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    border: '1px solid gray',
+    cursor: 'pointer',
+    flexDirection: 'row',
+  },
+  x: {
+    borderTop: '1px solid',
+    transform: 'rotate(45deg)',
+    width: '100%',
+    position: 'absolute',
+    top: 18,
+  },
+}
+
+class Checkbox extends React.Component {
+  state = {
+    hovered: false,
+  };
+
+  render() {
+    const hovered = this.state.hovered || this.props.checked;
+    return (
+      <div
+        className="cb-group"
+        style={{
+          ...cbs.checkbox,
+          background: hovered ? '#c1c1c1' : 'transparent',
+          borderColor: hovered ? '#c1c1c1' : 'gray',
+          color: hovered ? 'white' : 'initial',
+        }}
+        onClick={this.props.handleChange}
+        onMouseOver={() => this.setState({ hovered: true })}
+        onMouseOut={() => this.setState({ hovered: false })}
+      >
+        {this.props.checked &&
+          <Checkmark style={{ marginRight: 8 }} />
+        }
+        <div>{this.props.label}</div>
       </div>
-    </div>
-    <div>{props.label}</div>
-  </div>
-);
+    );
+  }
+}
 
 const DelayedFloater = props => (
   <div style={{
@@ -488,9 +505,9 @@ const DelayedFloater = props => (
 
 const RSVP = props => (
   <div style={{position: 'relative', minHeight: 130}}>
-    <DelayedFloater active={props.hasResponded && props.isComing} delay={props.hasResponded && 500}>
+    <DelayedFloater active={props.hasResponded && props.isComing} delay={props.hasResponded && 1000}>
       <div style={{display: 'flex', flexDirection: 'column'}}>
-        <div><span role="img" aria-label="party">🎉</span> "See you there!</div>
+        <div><span role="img" aria-label="party">🎉</span> See you there!</div>
         <div style={{
           fontSize: '0.75em',
           background: '#c1c1c1',
@@ -501,7 +518,7 @@ const RSVP = props => (
         }} onClick={props.handleClearResponse}>change rsvp</div>
       </div>
     </DelayedFloater>
-    <DelayedFloater active={props.hasResponded && !props.isComing} delay={props.hasResponded && 500}>
+    <DelayedFloater active={props.hasResponded && !props.isComing} delay={props.hasResponded && 1000}>
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <div><span role="img" aria-label="sad face">😢</span> We'll miss you!</div>
         <div style={{
@@ -514,23 +531,57 @@ const RSVP = props => (
         }} onClick={props.handleClearResponse}>change rsvp</div>
       </div>
     </DelayedFloater>
-    <div style={{ display: 'flex',  flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', position: 'relative', }}>
-      <div onClick={() => props.handleChange(true)} style={{
-        opacity: !props.hasResponded ? 1 : 0,
-        transition: `opacity 300ms ease-out 200ms, ${props.hasResponded && 'height 500ms ease-out 500ms'}`,
-        height: props.hasResponded ? 0 : 100
-      }}>
-        <Checkbox checked={props.isComing === true} label={props.yesText || "Accept with pleasure"} />
+    <div style={{
+      display: 'flex',  flexWrap: 'wrap', justifyContent: 'space-around', alignItems: 'center', position: 'relative', }}>
+      <div 
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          opacity: !props.hasResponded ? 1 : 0,
+          transition: `opacity 300ms ease-out ${!props.hasResponded ? 1 : 7}00ms, ${props.hasResponded && 'height 500ms ease-out 800ms'}`,
+          height: props.hasResponded ? 0 : 100
+        }}
+      >
+        <Checkbox
+          checked={props.hasResponded && props.isComing === true}
+          label={props.yesText || "Accept with pleasure."}
+          handleChange={() => props.handleChange(true)}
+        />
       </div>
-      <div onClick={() => props.handleChange(false)} style={{
-        opacity: !props.hasResponded ? 1 : 0,
-        transition: `opacity 300ms ease-out 200ms, ${props.hasResponded && 'height 500ms ease-out 500ms'}`,
-        height: props.hasResponded ? 0 : 100
-      }}>
-        <Checkbox checked={props.isComing === false} label={props.noText || "Decline with regret"} />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          opacity: !props.hasResponded ? 1 : 0,
+          transition: `opacity 300ms ease-out ${!props.hasResponded ? 1 : 7}00ms, ${props.hasResponded && 'height 500ms ease-out 800ms'}`,
+          height: props.hasResponded ? 0 : 100
+        }}
+      >
+        <Checkbox
+          checked={props.isComing === false}
+          label={props.noText || "Decline with regret."}
+          handleChange={() => props.handleChange(false)}
+        />
       </div>
     </div>
   </div>
 );
+
+const Checkmark = ({ size = 20, color = '#fff', style }) => (
+    <svg
+      style={{ ...style }}
+      xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill={color} version="1.1"
+      y="0px" enableBackground="new 0 0 100 100"
+      viewBox="0 0 100 100" x="0px"
+    >
+      <g>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M39.363,79L16,55.49l11.347-11.419L39.694,56.49L72.983,23L84,34.085L39.363,79z"
+        />
+      </g>
+    </svg>
+)
 
 export default App;
