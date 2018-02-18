@@ -37,12 +37,16 @@
       .overlay {
         background-color: rgba(28,13,10,.65);
         position: absolute;
+        left: 0;
+        top:0;
         height: 100%;
         width: 100%;
         z-index: 0;
       }
       #img {
         z-index: -1;
+        top:0;
+        left: 0;
         position: absolute;
         background-image: url("https://s3.amazonaws.com/kelseyandtim.com/img.jpeg");
         background-position: 50%;
@@ -146,16 +150,16 @@
         box-sizing: border-box;
       }
       .image {
-        max-width: 100px;
-        min-height: 100px;
+        width: 100px;
+        height: 100px;
       }
       @media (min-width:400px) {
         .content {
           font-size: 1.1em;
         }
         .image {
-          max-width: 180px;
-          min-height: 125px;
+          width: 180px;
+          height: 125px;
         }
       }
       @media (min-width:600px) {
@@ -163,8 +167,8 @@
           font-size: 1.5em;
         }
         .image {
-          max-width: 280px;
-          min-height: 200px;
+          width: 280px;
+          height: 200px;
         }
         .cb-group {
           /* width: auto; */

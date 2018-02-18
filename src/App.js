@@ -64,13 +64,17 @@ const images = [
 ]
 
 async function fetchInvitation(code, cb) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     database.ref(code).once('value', x => resolve(x.val()));
   });
 }
 
 function saveResponse(code, isComing) {
   database.ref(code).update({ isComing });
+}
+
+function saveMessage(code, message) {
+  database.ref(`${code}/messages`).push(message);
 }
 
 class App extends Component {
@@ -93,17 +97,17 @@ class App extends Component {
 
   handleKeyUp = async e => {
     if (e.key === 'Enter') {
-      const invitation = await fetchInvitation(this.state.rsvpCode);
+      const invitation = await fetchInvitation(this.state.attemptedRsvpCode);
       if (invitation) {
         this.input.blur();
-        window.localStorage.setItem('rsvpCode', this.state.rsvpCode);
-        this.setState({ ...invitation }, this.scrollToDetails)
+        window.localStorage.setItem('rsvpCode', this.state.attemptedRsvpCode);
+        this.setState({ ...invitation, rsvpCode: this.state.attemptedRsvpCode }, this.scrollToDetails)
       }
     }
   }
 
   handleChangeInput = e => {
-    this.setState({ rsvpCode: e.target.value.toLowerCase() });
+    this.setState({ attemptedRsvpCode: e.target.value.toLowerCase() });
   }
 
   scrollToDetails = () => {
@@ -131,7 +135,7 @@ class App extends Component {
           {(this.state.showInput || this.state.rsvpCode) &&
             <input
               autoFocus={!this.state.rsvpCode}
-              value={this.state.rsvpCode || ''}
+              value={this.state.attemptedRsvpCode || this.state.rsvpCode || ''}
               type="text"
               onKeyUp={this.handleKeyUp}
               onChange={this.handleChangeInput}
@@ -157,9 +161,32 @@ class App extends Component {
     this.setState({ isComing, hasResponded: true });
   }
 
+  handleOpenSendMessage = () => {
+    this.setState({ messageBoxOpen: true });
+  }
+
+  sendMessage = () => {
+    saveMessage(this.state.rsvpCode, this.state.messageText);
+    this.setState({ sendingMessage: true });
+    setTimeout(() => {
+      this.setState({ sendingMessage: false, sentMessage: true });
+      setTimeout(() => {
+        this.setState({ messageBoxOpen: false });
+        setTimeout(() => {
+          this.setState({ sentMessage: false });
+        }, 200);
+      }, 300);
+    }, 500);
+  }
+
+  getSendMessageButtonText = () => {
+    if (this.state.sendingMessage) return 'Sending...'
+    if (this.state.sentMessage) return 'Sent!'
+    return 'Send';
+  }
+
   updateBigImageIndex(increment) {
     let newIndex = this.state.bigImageIndex + increment;
-    console.log(newIndex)
     if (newIndex === images.length) {
       this.setState({ bigImageIndex: 0 })
       this.openImage(0)
@@ -206,7 +233,42 @@ class App extends Component {
                 `${this.state.message}`
               }
             </h1>
+            <div
+              style={{
+                overflow: 'hidden',
+                position: 'absolute',
+                zIndex: 9,
+                background: 'white',
+                width: 'calc(100% - 34px)',
+                maxWidth: 600,
+                height: this.state.messageBoxOpen ? 130 : 0,
+                transition: 'height 200ms ease-in 100ms'
+              }}
+            >
+              <textarea placeholder="Send us a message..." onChange={e => this.setState({messageText: e.target.value})} />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div 
+                  style={{
+                    flex: 1,
+                    fontSize: '0.75em',
+                    background: '#c1c1c1',
+                    borderRadius: 25,
+                    padding: '4px 16px',
+                    color: 'white',
+                    cursor: 'pointer',
+                    maxWidth: 200,
+                  }}
+                  onClick={this.sendMessage}
+                >{this.getSendMessageButtonText()}</div>
+                <div style={{
+                  fontSize: '0.75em',
+                  textDecoration: 'underline',
+                  cursor: 'pointer'
+                }} onClick={() => this.setState({ messageBoxOpen: false })}>cancel</div>
+              </div>
+            </div>
             <RSVP
+              handleOpenSendMessage={this.handleOpenSendMessage}
               handleChange={this.handleRSVP}
               handleClearResponse={() => this.setState({ isComing: undefined })}
               isComing={this.state.isComing}
@@ -219,14 +281,9 @@ class App extends Component {
         <section>
           <div>
             <h2>Wedding Details</h2>
-            <p>We're going to have a casual ceremony on the Little Goat Kitchen rooftop in the West Loop, where we had our first Valentine's day together. Following the ceremony we'll have music, drinks, and food catered by The Girl &amp; the Goat and Little Goat Diner.</p>
-            <p>6:00p - 11:00p, Little Goat Kitchen, Chicago IL</p>
-          </div>
-        </section>
-        <section>
-          <div>
-            <h2>Our Story</h2>
-            <p>Tim White and Kelsey Hoehn met at a New Year's Eve celebration in Chicago. We bonded over a balloon drop malfunction that resulted in the two of us collecting lots of fallen balloons, and we haven't looked back since.</p>
+            <p>We'll be hosting a welcome dinner for all guests on Friday night at one of our favorite pizza places in Chicago, Pizzeria Serio. On Saturday, we're going to have a casual ceremony on the Little Goat Kitchen rooftop in the West Loop, where we had our first Valentine's day together. Following the ceremony we'll have music, drinks, and food (including plenty of gluten-free and vegetarian options) catered by The Girl &amp; the Goat and Little Goat Diner.</p>
+            <p>Welcome dinner: Friday July 6th, 7:00p - 10:00p, Pizzeria Serio (<a target="_blank" href="https://www.google.com/maps/place/Pizzeria+Serio/@41.9397599,-87.6715078,15z/data=!4m5!3m4!1s0x0:0xbd348b70e925331a!8m2!3d41.9397599!4d-87.6715078">map</a>)</p>
+            <p>Ceremony and reception: Saturday July 7th, 6:00p - 11:00p, Little Goat Kitchen (<a target="_blank" href="https://www.google.com/maps/place/Little+Goat+Diner/@41.8846919,-87.6506006,17z/data=!3m1!4b1!4m5!3m4!1s0x880e2cdab5b63bfb:0xddee29d79059dec7!8m2!3d41.8846919!4d-87.6484066">map</a>)</p>
           </div>
         </section>
         <section>
@@ -235,6 +292,12 @@ class App extends Component {
             <p>We reserved a block of rooms at the Crowne Plaza Hotel in Chicago's West Loop.</p>
             <p><a target="_blank" rel="noopener noreferrer" href="https://www.crowneplaza.com/redirect?path=asearch&brandCode=CP&localeCode=en&regionCode=1&hotelCode=CHISH&checkInDate=06&checkInMonthYear=062018&checkOutDate=08&checkOutMonthYear=062018&rateCode=6CBARC&_PMID=99801505&GPC=h2w&viewfullsite=true">Book a room online</a> or call 312.829.5000 and mention group code H2W.</p>
             <p>Also check out AirBnB and VRBO because you'll probably find something cheaper and cozier.</p>
+          </div>
+        </section>
+        <section>
+          <div>
+            <h2>Our Story</h2>
+            <p>Tim White and Kelsey Hoehn met at a New Year's Eve celebration in Chicago. We bonded over a balloon drop malfunction that resulted in the two of us collecting lots of fallen balloons, and we haven't looked back since.</p>
           </div>
         </section>
         <section>
@@ -265,7 +328,7 @@ class App extends Component {
                     backgroundImage: `url(${img.small})`,
                     backgroundSize: 'cover',
                     backgroundPosition: '50%',
-                    width: '100%',
+                    // width: '100%',
                     margin: 1,
                     cursor: 'pointer'
                   }}
@@ -308,6 +371,7 @@ const style = {
     cursor: 'pointer',
     color: 'white',
     opacity: 0.5,
+    top: 'calc(50% - 50px)',
   }
 }
 
@@ -335,15 +399,15 @@ class BigImage extends React.Component {
   }
 
   handleChangeImage = e => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' || e.key === 'Esc') {
       this.handleClose();
     }
 
-    if (e.key === 'ArrowLeft') {
+    if (e.key === 'ArrowLeft' || e.key === 'Left') {
       this.handleShowPrev();
     }
 
-    if (e.key === 'ArrowRight') {
+    if (e.key === 'ArrowRight' || e.key === 'Right') {
       this.handleShowNext();
     }
   }
@@ -413,7 +477,7 @@ class BigImage extends React.Component {
         {this.state.loading &&
           <Hammer onSwipe={this.handleSwipe}>
             <img
-              className="big-image"
+              className="big-image placeholder"
               alt=''
               src={this.props.placeholder}
             />
@@ -424,7 +488,7 @@ class BigImage extends React.Component {
             className="big-image"
             alt=''
             src={this.props.src}
-            style={{ display: this.state.loading ? 'none' : 'initial' }}
+            style={{ display: this.state.loading ? 'none' : 'block' }}
             onLoad={() => this.setState({ loading: false })}
           />
         </Hammer>
@@ -472,7 +536,7 @@ class Checkbox extends React.Component {
           ...cbs.checkbox,
           background: hovered ? '#c1c1c1' : 'transparent',
           borderColor: hovered ? '#c1c1c1' : 'gray',
-          color: hovered ? 'white' : 'initial',
+          color: hovered ? 'white' : '#333',
         }}
         onClick={this.props.handleChange}
         onMouseOver={() => this.setState({ hovered: true })}
@@ -508,27 +572,47 @@ const RSVP = props => (
     <DelayedFloater active={props.hasResponded && props.isComing} delay={props.hasResponded && 1000}>
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <div><span role="img" aria-label="party">🎉</span> See you there!</div>
-        <div style={{
-          fontSize: '0.75em',
-          background: '#c1c1c1',
-          borderRadius: 25,
-          marginTop: '0.75em',
-          color: 'white',
-          cursor: 'pointer'
-        }} onClick={props.handleClearResponse}>change rsvp</div>
+        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+              fontSize: '0.65em',
+              background: '#c1c1c1',
+              borderRadius: 25,
+              marginTop: '0.75em',
+              marginRight: 16,
+              padding: '4px 16px',
+              color: 'white',
+              cursor: 'pointer'
+            }} onClick={props.handleOpenSendMessage}>send us a message</div>
+            <div style={{
+              fontSize: '0.65em',
+              textDecoration: 'underline',
+              marginTop: '0.75em',
+              cursor: 'pointer'
+            }} onClick={props.handleClearResponse}>change rsvp</div>
+        </div>
       </div>
     </DelayedFloater>
     <DelayedFloater active={props.hasResponded && !props.isComing} delay={props.hasResponded && 1000}>
       <div style={{display: 'flex', flexDirection: 'column'}}>
         <div><span role="img" aria-label="sad face">😢</span> We'll miss you!</div>
-        <div style={{
-          fontSize: '0.75em',
-          background: '#c1c1c1',
-          borderRadius: 25,
-          marginTop: '0.75em',
-          color: 'white',
-          cursor: 'pointer'
-        }} onClick={props.handleClearResponse}>change rsvp</div>
+        <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{
+              fontSize: '0.65em',
+              background: '#c1c1c1',
+              borderRadius: 25,
+              marginTop: '0.75em',
+              marginRight: 16,
+              padding: '4px 16px',
+              color: 'white',
+              cursor: 'pointer'
+            }} onClick={props.handleOpenSendMessage}>send us a message</div>
+            <div style={{
+              fontSize: '0.65em',
+              textDecoration: 'underline',
+              marginTop: '0.75em',
+              cursor: 'pointer'
+            }} onClick={props.handleClearResponse}>change rsvp</div>
+        </div>
       </div>
     </DelayedFloater>
     <div style={{

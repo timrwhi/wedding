@@ -1,0 +1,224 @@
+{
+  "3211": {
+    "message": "GBABY and RyGUY. We need professional dancers at the wedding - you free??",
+    "guests": [
+      "Gabi",
+      "Ryan"
+    ],
+    "buttons": ["Count us in.", "Can't make it."]
+  },
+  "ab n jojo": {
+    "message": "Abgail and Joseph! Charlie and Ike can come too, if they promise not to run up the bar tab. Will you join us?",
+    "guests": [
+      "Abby",
+      "Joseph"
+    ]
+  },
+  "ju n dan": {
+    "message": "Rev Ju and Dan! Get your shortie tuxes pressed - we need those runner's calves on display. Can ya make it?",
+    "guests": [
+      "Julia",
+      "Dan"
+    ],
+    "buttons": ["Duh, we'll be there!", "Got another ceremony to officiate."]
+  },
+  "maaam": {
+    "message": "Hi Maaam and Bob! Thanks for everything you've helped us with. We love you! Will you join us?",
+    "guests": [
+      "Mom",
+      "Bob"
+    ]
+  },
+  "faja": {
+    "message": "Hi Dad and Julie! How about some delicious goat meat? We love you! Will you join us?",
+    "guests": [
+      "Dad",
+      "Julie"
+    ]
+  },
+  "papnfox": {
+    "message": "Hi Pap and Fox! This is a formality - you coming to the wedding? Watch us get married and dance big. ",
+    "guests": [
+      "Pap",
+      "Fox"
+    ],
+    "buttons": ["Wouldn't miss it for the world."]
+  },
+  "fisk": {
+    "message": "Hallo Marv and Trav! Pleath come to our wedding! Love, Tammy and Rels.",
+    "guests": [
+      "Mary",
+      "Trevor"
+    ]
+  },
+  "lily": {
+    "message": "Hey Kate and Ian! Lily can come too, if she promises not to run up the bar tab. Will you join us?",
+    "guests": [
+      "Kate",
+      "Ian"
+    ]
+  },
+  "lil sis is getting married": {
+    "message": "Hi Justin and Nichole! We love you! Will you join us?",
+    "guests": [
+      "Nichole",
+      "Justin"
+    ],
+    "buttons":["Of Course!"]
+  },
+  "amma": {
+    "message": "Hi Amma! How about a big city wedding adventure?! Will you join us?",
+    "guests": [
+      "Amma"
+    ]
+  },
+  "go blue": {
+    "message": "Hi Grandma and Grandpa! We'd love to share our wedding day with you! Will you join us?",
+    "guests": [
+      "Grandma",
+      "Grandpa"
+    ]
+  },
+  "julie": {
+    "message": "Hi Julie! We'd love to share our wedding day with you! Will you join us?",
+    "guests": ["Julie"],
+    "buttons": ["Of Course!", "I can't make it."]
+  },
+  "tina": {
+    "message": "Hey guys! Can you help us finish our huppah real quick?",
+    "guests": [
+      "Kap",
+      "Marissa"
+    ],
+    "buttons": ["We'll be there!", "We can't make it."]    
+  },
+  "euchre": {
+    "message": "Hey guys! Maizey can come too, as long as she promises not to run up the bar tab. Will you join us?",
+    "guests": [
+      "Bristol",
+      "Carly"
+    ]
+  },
+  "goldfarb": {
+    "message": "Lizzie and Elmer! We can't celebrate without you, will you be there?",
+    "guests": [
+      "Lizzie",
+      "Elmer"
+    ],
+    "buttons": ["Of Course!", "We can't make it."]    
+  },
+  "dragons": {
+    "message": "Marc. Come to our wedding, otherwise fuck you.",
+    "guests": [
+      "Marc"
+    ],
+    "buttons": ["I'll be there", "Fuck off"]
+  },
+  "lyla": {
+    "message": "Hey Glotters! Will you two lead us in the Hora? Just kidding, that's cultural appropriation. Unless you say it's ok...",
+    "guests": [
+      "Glotter",
+      "Neili"
+    ]
+  },
+  "kevin smith": {
+    "message": "Hey Max and Corey! Will you join us for a night of naming random athletes? Maybe Schoolyard after?",
+    "guests": [
+      "Max",
+      "Corey"
+    ]
+  },
+  "baller": {
+    "message": "Hey ballers! Risk?",
+    "guests": [
+      "Bryan",
+      "Jess"
+    ]
+  },
+  "eagle spot": {
+    "message": "Hey Dave and Katie! Feelin' a trip back to the midwest?",
+    "guests": [
+      "Dave",
+      "Katie"
+    ]
+  },
+  "liseynjosh": {
+    "message": "Lisey and Josh! We can't celebrate without you, will you be there?",
+    "guests": [
+      "Elise",
+      "Josh"
+    ],
+    "buttons": ["Of Course!", "We can't make it."]    
+  },
+  "chchch": {
+    "message": "Hey Jake and Laura! C'mon and hang out a little, we have a little party planned...",
+    "guests": [
+      "Jake",
+      "Laura"
+    ]
+  },
+  "bill murray": {
+    "message": "Hey Josh and Lauren! Feelin' a trip back to the midwest?",
+    "guests": [
+      "Josh",
+      "Lauren"
+    ]
+  },
+  "zeldas rents": {
+    "message": "Elexa and Kevin! We'd love to see you at our wedding! Can you make it?",
+    "guests": [
+      "Elexa",
+      "Kevin"
+    ],
+    "buttons": ["Of Course!", "We can't make it."]
+    
+  },
+  "braaap": {
+    "message": "Hey Uncle Tom! Louise keeps asking us if you'll come to our wedding, will you join us?",
+    "guests": [
+      "Uncle Tom"
+    ]
+  },
+  "bruce": {
+    "message": "Hey Uncle Nitrous and Jordan! The farm will survive without you for a weekend, we'd love to see you at our wedding!",
+    "guests": [
+      "Uncle Nitrous",
+      "Jordan"
+    ]
+  },
+  "goblue": {
+    "message": "Hi Uncle Rob and Aunt Kathy! We'd love to see you at our wedding, will you join us?",
+    "guests": [
+      "Uncle Rob",
+      "Aunt Kathy"
+    ]
+  },
+  "mackinac island": {
+    "message": "Hi Uncle Joe and Shawna! We'd love to see you at our wedding, will you join us?",
+    "guests": [
+      "Uncle Joe",
+      "Shawna"
+    ]
+  },
+  "pineneedle lane": {
+    "message": "Hey Bruce and Cheryl! We'd love to see you at our wedding, will you join us?",
+    "guests": [
+      "Cheryl",
+      "Bruce"
+    ]
+  },
+  "cul de sac kids": {
+    "message": "Sam and Amaaaay! We'd love to see you at our wedding, will you join us?",
+    "guests": [
+      "Amy",
+      "Sam"
+    ]
+  },
+  "patience and waiting": {
+    "message": "Yelloooo Joey and Molly! Hanson Island was open, but we decided to get married in Chicago... will you join us?",
+    "guests": [
+      "Joey",
+      "Molly"
+    ]
+  }
+}
