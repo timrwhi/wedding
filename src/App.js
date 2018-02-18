@@ -4,8 +4,8 @@ import firebase from 'firebase';
 import Hammer from 'react-hammerjs';
 
 const config = {
-  apiKey: "AIzaSyDp-HnXVEhsQuN0I_TqTbtrxAdUKS4r8vk",
-  databaseURL: "https://tamnrels.firebaseio.com",
+  apiKey: process.env.REACT_APP_API_KEY,
+  databaseURL: process.env.REACT_APP_DB_URL,
 };
 
 const f = firebase.initializeApp(config);
