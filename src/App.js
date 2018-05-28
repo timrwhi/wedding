@@ -63,6 +63,12 @@ const images = [
   },
 ]
 
+async function fetchIsSiteOpen() {
+  return new Promise((resolve, reject) => {
+    database.ref('opensite').once('value', x => resolve(x.val()));
+  });
+}
+
 async function fetchInvitation(code, cb) {
   return new Promise((resolve, reject) => {
     database.ref(code).once('value', x => resolve(x.val()));
@@ -85,6 +91,9 @@ class App extends Component {
   };
 
   async componentDidMount() {
+    const openSite = await fetchIsSiteOpen();
+    this.setState({ openSite }, this.scrollToDetails)
+    
     const rsvpCode = window.localStorage.getItem('rsvpCode')
     if (!rsvpCode) {
       return;
@@ -129,10 +138,10 @@ class App extends Component {
           <div className="names">Kelsey + Tim</div>
           <div className="title">We&apos;re Getting Married</div>
           <div className="date">July 7, 2018 / Chicago</div>
-          {!this.state.showInput && !this.state.rsvpCode &&
+          {!this.state.openSite && !this.state.showInput && !this.state.rsvpCode &&
             <div className="button" onClick={() => this.setState({ showInput: true })}>RSVP</div>
           }
-          {(this.state.showInput || this.state.rsvpCode) &&
+          {!this.state.openSite && (this.state.showInput || this.state.rsvpCode) &&
             <input
               autoFocus={!this.state.rsvpCode}
               value={this.state.attemptedRsvpCode || this.state.rsvpCode || ''}
@@ -225,6 +234,7 @@ class App extends Component {
             src={this.state.viewingImage}
           />
         }
+        {this.state.rsvpCode &&
         <section>
           <div>
             <h1 style={{marginTop: 16}}>
@@ -278,20 +288,27 @@ class App extends Component {
             />
           </div>
         </section>
+        }
         <section>
           <div>
-            <h2>Wedding Details</h2>
-            <p>We'll be hosting a welcome dinner for all guests on Friday night at one of our favorite pizza places in Chicago, Pizzeria Serio. On Saturday, we're going to have a casual ceremony on the Little Goat Kitchen rooftop in the West Loop, where we had our first Valentine's day together. Following the ceremony we'll have music, drinks, and food (including plenty of gluten-free and vegetarian options) catered by The Girl &amp; the Goat and Little Goat Diner.</p>
-            <p>Welcome dinner: Friday July 6th, 7:00p - 10:00p, Pizzeria Serio (<a target="_blank" href="https://www.google.com/maps/place/Pizzeria+Serio/@41.9397599,-87.6715078,15z/data=!4m5!3m4!1s0x0:0xbd348b70e925331a!8m2!3d41.9397599!4d-87.6715078">map</a>)</p>
-            <p>Ceremony and reception: Saturday July 7th, 6:00p - 11:00p, Little Goat Kitchen (<a target="_blank" href="https://www.google.com/maps/place/Little+Goat+Diner/@41.8846919,-87.6506006,17z/data=!3m1!4b1!4m5!3m4!1s0x880e2cdab5b63bfb:0xddee29d79059dec7!8m2!3d41.8846919!4d-87.6484066">map</a>)</p>
+            <h2>Wedding Weekend Details</h2>
+            <h3>Welcome Dinner</h3>
+            <p>Friday July 6th, 7:00p - 10:00p, Pizzeria Serio (<a target="_blank"
+            rel="noopener noreferrer" href="https://www.google.com/maps/place/Pizzeria+Serio/@41.9397599,-87.6715078,15z/data=!4m5!3m4!1s0x0:0xbd348b70e925331a!8m2!3d41.9397599!4d-87.6715078">map</a>)</p>
+            <p>We'll be hosting a welcome dinner for all guests on Friday night at one of our favorite pizza places in Chicago!</p>
+            <h3>Ceremony and Reception</h3>
+            <p>Saturday July 7th, 6:00p - 11:00p, Little Goat Diner (<a target="_blank"
+            rel="noopener noreferrer" href="https://www.google.com/maps/place/Little+Goat+Diner/@41.8846919,-87.6506006,17z/data=!3m1!4b1!4m5!3m4!1s0x880e2cdab5b63bfb:0xddee29d79059dec7!8m2!3d41.8846919!4d-87.6484066">map</a>)</p>
+            <p>The ceremony will be on the Little Goat Diner rooftop in the West Loop, where we had our first Valentine's day together. Following the ceremony we'll have music, drinks, and food (including plenty of gluten-free and vegetarian options) catered by The Girl &amp; the Goat and Little Goat Diner.</p>
           </div>
         </section>
         <section>
           <div>
-            <h2>Accomodations</h2>
+            <h2>Accommodations</h2>
             <p>We reserved a block of rooms at the Crowne Plaza Hotel in Chicago's West Loop.</p>
             <p><a target="_blank" rel="noopener noreferrer" href="https://www.crowneplaza.com/redirect?path=asearch&brandCode=CP&localeCode=en&regionCode=1&hotelCode=CHISH&checkInDate=06&checkInMonthYear=062018&checkOutDate=08&checkOutMonthYear=062018&rateCode=6CBARC&_PMID=99801505&GPC=h2w&viewfullsite=true">Book a room online</a> or call 312.829.5000 and mention group code H2W.</p>
-            <p>Also check out AirBnB and VRBO because you'll probably find something cheaper and cozier.</p>
+            <p>If you're driving and need parking, check out <a target="_blank" href="http://www.parkwhiz.com" rel="noopener noreferrer">ParkWhiz</a> to reserve a spot at a reasonable rate.</p>
+            <p>Also check out <a href="https://www.airbnb.com/s/West-Loop--Chicago--IL--United-States/homes?place_id=ChIJ3baIM9osDogRVpFwiwqSLJQ&query=West%20Loop%2C%20Chicago%2C%20IL%2C%20United%20States&refinement_paths%5B%5D=%2Fhomes&allow_override%5B%5D=&s_tag=xtWgQWh7" target="_blank" rel="noopener noreferrer">AirBnB</a> and <a href="https://www.vrbo.com/results?pets=false&q=West+Loop%2C+Chicago%2C+IL%2C+USA&to-date=07%2F08%2F2018&children=0&from-date=07%2F06%2F2018&adults=2&uuid=" target="_blank" rel="noopener noreferrer">VRBO</a> because you'll probably find something cheaper and cozier.</p>
           </div>
         </section>
         <section>
@@ -341,9 +358,38 @@ class App extends Component {
         <section>
           <div>
             <h2>Registry</h2>
-            <a href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172" target="_blank" rel="noopener noreferrer">
-              <img alt='crate &amp; barrel' src="https://static1.squarespace.com/static/57884b13e6f2e11d7ccf73d8/58cb48de3e00be7918cd2b44/58cb4ab5be65946ee838572f/1489718396797/cb-logo.png" style={{ width: 150 }} />
-            </a>
+            <div style={{ display: 'flex' }}>
+              <a
+                href="https://www.crateandbarrel.com/gift-registry/kelsey-hoehn/r5779172"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  margin: 2,
+                }}
+              >
+                <img alt='crate &amp; barrel' src="https://static1.squarespace.com/static/57884b13e6f2e11d7ccf73d8/58cb48de3e00be7918cd2b44/58cb4ab5be65946ee838572f/1489718396797/cb-logo.png" style={{ width: 150 }} />
+              </a>
+              <a
+                href="https://www.zola.com/registry/timandkelsey2018/edit"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  alignItems: 'center',
+                  background: 'black',
+                  display: 'flex',
+                  height: 150,
+                  justifyContent: 'center',
+                  margin: 2,
+                  width: 150,
+                }}
+              >
+                <img
+                  alt="Zola"
+                  src="https://s3.amazonaws.com/kelseyandtim.com/logo-zola.png"
+                  style={{ width: 112 }}
+                />
+              </a>
+            </div>
           </div>
         </section>
       </div>
@@ -354,7 +400,7 @@ class App extends Component {
     return (
       <div style={{ height: '100%' }}>
         {this.renderHero()}
-        {this.state.rsvpCode &&
+        {(this.state.openSite || this.state.rsvpCode) &&
           this.renderDetails()
         }
       </div>
